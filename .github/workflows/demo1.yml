@@ -1,4 +1,4 @@
-name: Debug YAML and JSON Processing
+name: Debug YAML and JSON Files
 
 on:
   push:
@@ -25,14 +25,29 @@ jobs:
         jq --version
         yq --version
 
-    - name: View YAML File Content
+    - name: Confirm File Existence
+      run: |
+        if [ ! -f path/to/yourfile.yaml ]; then echo "YAML file not found"; exit 1; fi
+        if [ ! -f path/to/yourfile.json ]; then echo "JSON file not found"; exit 1; fi
+
+    - name: Print YAML File Content
       run: cat path/to/yourfile.yaml
 
-    - name: View JSON File Content
+    - name: Print JSON File Content
       run: cat path/to/yourfile.json
 
-    - name: Process YAML File with yq
-      run: yq '.key // "default_value"' path/to/yourfile.yaml
+    - name: Test YAML Processing with yq
+      run: yq '.' path/to/yourfile.yaml
 
-    - name: Process JSON File with jq
-      run: jq '.key // "default_value"' path/to/yourfile.json
+    - name: Test JSON Processing with jq
+      run: jq '.' path/to/yourfile.json
+
+    - name: Debug YAML with yq
+      run: |
+        echo "Running yq command..."
+        yq '.key // "default_value"' path/to/yourfile.yaml || echo "yq command failed"
+
+    - name: Debug JSON with jq
+      run: |
+        echo "Running jq command..."
+        jq '.key // "default_value"' path/to/yourfile.json || echo "jq command failed"
