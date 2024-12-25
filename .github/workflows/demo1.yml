@@ -1,0 +1,35 @@
+name: Process YAML and JSON Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  process-files:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checkout the repository
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Install `yq` and `jq`
+    - name: Install yq and jq
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
+        curl -sL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/bin/yq
+        chmod +x /usr/bin/yq
+
+    # Use `yq` to process a YAML file
+    - name: Process YAML File with yq
+      run: |
+        echo "Processing YAML file with yq..."
+        yq '.key' path/to/yourfile.yaml
+
+    # Use `jq` to process a JSON file
+    - name: Process JSON File with jq
+      run: |
+        echo "Processing JSON file with jq..."
+        jq '.key' path/to/yourfile.json
