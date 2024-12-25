@@ -1,4 +1,4 @@
-name: Process YAML and JSON Files
+name: Debug YAML and JSON Processing
 
 on:
   push:
@@ -6,38 +6,33 @@ on:
       - main
 
 jobs:
-  process-files:
+  debug-files:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Install yq and jq
+    - name: Install jq and yq
       run: |
         sudo apt-get update
         sudo apt-get install -y jq
         curl -sL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/bin/yq
         chmod +x /usr/bin/yq
 
-    - name: Check yq and jq Versions
+    - name: Check jq and yq Versions
       run: |
-        yq --version
         jq --version
+        yq --version
 
-    - name: Check File Existence
-      run: |
-        if [ ! -f path/to/yourfile.yaml ]; then echo "YAML file not found"; exit 1; fi
-        if [ ! -f path/to/yourfile.json ]; then echo "JSON file not found"; exit 1; fi
+    - name: View YAML File Content
+      run: cat path/to/yourfile.yaml
+
+    - name: View JSON File Content
+      run: cat path/to/yourfile.json
 
     - name: Process YAML File with yq
-      run: |
-        echo "Processing YAML file..."
-        cat path/to/yourfile.yaml
-        yq '.key' path/to/yourfile.yaml
+      run: yq '.key // "default_value"' path/to/yourfile.yaml
 
     - name: Process JSON File with jq
-      run: |
-        echo "Processing JSON file..."
-        cat path/to/yourfile.json
-        jq '.key' path/to/yourfile.json
+      run: jq '.key // "default_value"' path/to/yourfile.json
