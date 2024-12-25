@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Install `yq` and `jq`
     - name: Install yq and jq
       run: |
         sudo apt-get update
@@ -22,14 +20,24 @@ jobs:
         curl -sL https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -o /usr/bin/yq
         chmod +x /usr/bin/yq
 
-    # Use `yq` to process a YAML file
+    - name: Check yq and jq Versions
+      run: |
+        yq --version
+        jq --version
+
+    - name: Check File Existence
+      run: |
+        if [ ! -f path/to/yourfile.yaml ]; then echo "YAML file not found"; exit 1; fi
+        if [ ! -f path/to/yourfile.json ]; then echo "JSON file not found"; exit 1; fi
+
     - name: Process YAML File with yq
       run: |
-        echo "Processing YAML file with yq..."
+        echo "Processing YAML file..."
+        cat path/to/yourfile.yaml
         yq '.key' path/to/yourfile.yaml
 
-    # Use `jq` to process a JSON file
     - name: Process JSON File with jq
       run: |
-        echo "Processing JSON file with jq..."
+        echo "Processing JSON file..."
+        cat path/to/yourfile.json
         jq '.key' path/to/yourfile.json
