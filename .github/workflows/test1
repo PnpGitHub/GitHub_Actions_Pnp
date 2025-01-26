@@ -5,8 +5,6 @@ jobs:
         run: |
           if ! command -v python3 &> /dev/null; then
             echo "Python 3 not found. Installing Python 3."
-            # Install Python 3 using your preferred method (e.g., apt-get, yum, etc.)
-            # This example uses apt-get for Debian/Ubuntu based systems
             sudo apt-get update
             sudo apt-get install -y python3 
           else
@@ -15,4 +13,7 @@ jobs:
       - uses: ./.github/workflows/reusable_test1.yml@v1  # Call the reusable workflow
         with:
           args: 'some arguments'
+          post: |
+            echo "This is the after_script block (from main workflow)"
+            # Add your after_script commands here (e.g., cleanup, notifications)
       - run: echo "This is the main job step"
