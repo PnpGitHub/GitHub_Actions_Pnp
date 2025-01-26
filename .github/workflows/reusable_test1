@@ -1,6 +1,15 @@
+name: Reusable Test Workflow
+
+on:
+  workflow_call:
+    inputs:
+      args:
+        required: true
+        type: string
+
 jobs:
-  - job: reusable_job
+  test_job:
+    runs-on: ubuntu-latest
     steps:
-      - run: echo "This is the reusable job step"
-      - run: echo "Arguments passed: ${{ inputs.args }}"
-      - run: ${{ inputs.post }}  # Execute the after_script block passed from main workflow
+      - name: Run with arguments
+        run: echo "Received arguments: ${{ inputs.args }}"

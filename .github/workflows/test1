@@ -1,6 +1,13 @@
+name: Example Workflow
+
+on:
+  workflow_dispatch:
+
 jobs:
-  - job: my_job
+  my_job:
+    runs-on: ubuntu-latest
     steps:
+      # Check Python Installation
       - name: Check Python Installation
         run: |
           if ! command -v python3 &> /dev/null; then
@@ -10,11 +17,22 @@ jobs:
           else
             echo "Python 3 is already installed."
           fi
-      - uses: ./.github/workflows/reusable_test1.yml@v1  # Call the reusable workflow
+
+      # Call Reusable Workflow
+      - name: Call Reusable Workflow
+        uses: ./path/to/reusable_test1.yml
         with:
           args: 'some arguments'
-          post: |
-            echo "This is the after_script block (from main workflow)"
-            # Add your after_script commands here (e.g., cleanup, notifications)
-      - run: echo "This is the main job step"
 
+      # Main job step
+      - name: Main Job Step
+        run: echo "This is the main job step"
+
+  cleanup:
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: After Script (Cleanup)
+        run: |
+          echo "This is the after_script block (from main workflow)"
+          # Add cleanup or notification logic here
