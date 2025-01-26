@@ -1,0 +1,6 @@
+jobs:
+  - job: reusable_job
+    steps:
+      - run: echo "This is the reusable job step"
+      - run: echo "Arguments passed: ${{ inputs.args }}"
+      - run: ${{ inputs.post }}  # Execute the after_script block passed from main workflow
